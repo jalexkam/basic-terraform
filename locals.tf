@@ -1,5 +1,5 @@
 locals {
   common-tag = {
-    environment: "DEV"
+    environment: "DEVELOPEMENT"
   }
 }
