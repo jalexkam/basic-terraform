@@ -1,4 +1,4 @@
-resource "aws_internet_gateway" "int_gw23" {
+resource "aws_internet_gateway" "int_gw" {
   vpc_id = aws_vpc.vpc.id
   tags   = merge(local.common-tag, { Name : "${local.common-tag.environment}-igw" })
 
