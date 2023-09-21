@@ -40,7 +40,7 @@ resource "aws_route_table_association" "private_subnet2_association" {
 
 resource "aws_route" "private_default" {
   route_table_id         = aws_route_table.private.id
-  nat_gateway_id         = aws_nat_gateway.nat_gw.id
+  gateway_id             = "local"
   destination_cidr_block = "0.0.0.0/0"
 }
 
