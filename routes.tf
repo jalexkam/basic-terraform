@@ -60,7 +60,8 @@ resource "aws_route_table_association" "database2" {
 }
 
 resource "aws_route" "database_default" {
-  route_table_id         = aws_route_table.database.id
-  nat_gateway_id         = aws_nat_gateway.nat_gw.id
+  route_table_id = aws_route_table.database.id
+  #nat_gateway_id         = aws_nat_gateway.nat_gw.id
+  gateway_id             = "local"
   destination_cidr_block = "0.0.0.0/0"
 }
