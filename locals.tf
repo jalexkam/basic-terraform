@@ -1,6 +1,6 @@
 locals {
   common-tag = {
     environment : "dev",
-    project : "Home"
+    project : "cardiff"
   }
 }

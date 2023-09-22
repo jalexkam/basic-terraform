@@ -38,11 +38,11 @@ resource "aws_route_table_association" "private_subnet2_association" {
 }
 
 
-resource "aws_route" "private_default" {
-  route_table_id         = aws_route_table.private.id
-  gateway_id             = "local"
-  destination_cidr_block = "0.0.0.0/0"
-}
+# resource "aws_route" "private_default" {
+#   route_table_id         = aws_route_table.private.id
+#  nat_gateway_id         = aws_nat_gateway.nat_gw.id
+#   destination_cidr_block = "0.0.0.0/0"
+# }
 
 /* Database */
 resource "aws_route_table" "database" {
@@ -59,8 +59,8 @@ resource "aws_route_table_association" "database2" {
   route_table_id = aws_route_table.database.id
 }
 
-resource "aws_route" "database_default" {
-  route_table_id         = aws_route_table.database.id
-  nat_gateway_id         = aws_nat_gateway.nat_gw.id
-  destination_cidr_block = "0.0.0.0/0"
-}
+# resource "aws_route" "database_default" {
+#   route_table_id         = aws_route_table.database.id
+#   nat_gateway_id         = aws_nat_gateway.nat_gw.id
+#   destination_cidr_block = "0.0.0.0/0"
+# }
