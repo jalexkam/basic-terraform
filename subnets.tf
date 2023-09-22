@@ -33,9 +33,6 @@ resource "aws_subnet" "priv_2" {
   tags              = merge(local.common-tag, { Name : "${local.common-tag.environment}-priv_2" })
 }
 
-
-
-
 #database
 resource "aws_subnet" "db1" {
   vpc_id = aws_vpc.vpc.id
