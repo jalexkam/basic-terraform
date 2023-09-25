@@ -21,8 +21,9 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  profile = "alex-meli-card-admincli"
-  region  = "us-east-1"
+  profile                  = "alex-meli-card-admincli"
+  region                   = "us-east-1"
+  shared_credentials_files = ["/home/ec2-user/.aws/credentials"]
   #access_key = "AKIA5S2A5T5737JB7OPU"
   #secret_key = "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"
 }
