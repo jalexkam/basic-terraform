@@ -1,4 +1,7 @@
 module "my_vpc" {
+  providers = {
+    aws = aws
+  }
   source = "./Modules/Vpc"
 
   aws_region  = "us-east-1"
