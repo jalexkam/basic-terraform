@@ -21,7 +21,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  profile                  = var.aws_profile
-  region                   = var.aws_region
-  shared_credentials_files = ["/home/ec2-user/.aws/credentials"]
+  profile = var.aws_profile
+  region  = var.aws_region
+  //shared_credentials_files = ["/home/ec2-user/.aws/credentials"]
 }
