@@ -1,8 +1,8 @@
 version: 3
 projects:
-- dir: ./Dev
+- dir: live/staging
   workflow: terragrunt
-- dir: ./Staging
+- dir: live/prod
   workflow: terragrunt
 workflows:
   terragrunt:
@@ -15,8 +15,7 @@ workflows:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
-      - run: /usr/local/bin/terragrunt plan -out=$PLANFILE
-      - run: echo "done"
+      
       - run: terragrunt plan -input=false -out=$PLANFILE
     apply:
       steps:
