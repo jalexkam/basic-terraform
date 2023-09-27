@@ -1,13 +1,41 @@
+# repos.yaml
+# Specify TERRAGRUNT_TFPATH environment variable to accommodate setting --default-tf-version
+# Generate json plan via terragrunt for policy checks
 version: 3
 projects:
 - dir: ./Dev
   workflow: terragrunt
 - dir: ./Staging
   workflow: terragrunt
+
 workflows:
   terragrunt:
     plan:
       steps:
+      - env:
+          # set the workspace
+          name: TF_WORKSPACE
+          command: 'echo "terraform - ${WORKSPACE}"'
+
+      - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+      - env:
+          # Reduce Terraform suggestion output
+          name: TF_IN_AUTOMATION
+          value: 'true'
+
+      - run: terragrunt init 
+
+      - run: terragrunt plan -input=false -out=$PLANFILE
+
+    apply:
+      steps:
+      - env:
+          # set the workspace
+          name: TF_WORKSPACE
+          command: 'echo "terraform - ${WORKSPACE}"'
+
       - env:
           name: TERRAGRUNT_TFPATH
           command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
@@ -16,15 +44,4 @@ workflows:
           name: TF_IN_AUTOMATION
           value: 'true'
           
-      - run: terragrunt plan -input=false -out=$PLANFILE
-
-    apply:
-      steps:
-      - env:
-          name: TERRAGRUNT_TFPATH
-          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
-      - env:
-          # Reduce Terraform suggestion output
-          name: TF_IN_AUTOMATION
-          value: 'true'
       - run: terragrunt apply $PLANFILE

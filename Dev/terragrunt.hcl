@@ -3,14 +3,14 @@ include {
 }
 
 terraform {
-   extra_arguments "common_var" {
-    commands  = get_terraform_commands_that_need_vars()
-    arguments = ["-var-file=${get_terragrunt_dir()}/terraform.tfvars"]
+    extra_arguments "common_var" {
+      commands  = get_terraform_commands_that_need_vars()
+      arguments = ["-var-file=${get_terragrunt_dir()}/terraform.tfvars"]
+    }
+
+      source = "../modules/vpc"
   }
-
-  source = "../modules/vpc"
-}
-
+  
 inputs = {
   cidr_block = "192.168.0.0/16"
   db_subnets = ["192.168.0.0/24", "192.168.1.0/24"]
