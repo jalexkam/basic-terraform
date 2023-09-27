@@ -6,6 +6,7 @@ terraform {
       version = "5.17"
     }
   }
+
   # backend "local" {
   #   path = "./terraformstate.tfstate"
   # }
@@ -20,6 +21,10 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region  = var.aws_region
-  profile = var.aws_profile
+  // profile = var.aws_profile
+  region = var.aws_region
+  // shared_credentials_files = ["/home/ec2-user/.aws/credentials"]
+
+  access_key = "AKIA5S2A5T5774F3DR6N"
+  secret_key = "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"
 }
