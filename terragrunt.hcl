@@ -17,14 +17,27 @@ generate "provider" {
   path = "provider.tf"
   if_exists = "overwrite_terragrunt"
   contents = <<EOF
+        terraform { 
+      required_version = ">=1.0.0"
+      required_providers {
+        aws = {
+          source = "hashicorp/aws"
+          version = "5.16"
+        }
+      }
+    }
+
     provider "aws" {
       region  = "eu-west-1"
       profile = "alex-meli-card-admincli"
     }
+
   EOF
 }
+
 
 inputs = {
   project     = "Alex"
   region = "eu-est-1"
 }
+
