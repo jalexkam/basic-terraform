@@ -15,7 +15,7 @@ workflows:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
-      - run: /usr/local/bin/terragrunt int
+      - run: /usr/local/bin/terragrunt init
       - run: terragrunt plan -input=false -out=$PLANFILE
     apply:
       steps:
