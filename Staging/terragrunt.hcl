@@ -3,8 +3,11 @@ include {
 }
 
 terraform {
-  source = "../modules/vpc"
-}
+    extra_arguments "common_var" {
+      commands  = get_terraform_commands_that_need_vars()
+      arguments = ["-var-file=${get_terragrunt_dir()}/terraform.tfvars"]
+    }
+  }
 
 inputs = {
   cidr_block = "172.100.0.0/16"
