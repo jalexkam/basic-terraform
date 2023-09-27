@@ -1,29 +1,29 @@
-version: 3
-projects:
-- dir: .
-  workflow: terragrunt
-# - dir: ./Staging
+# version: 3
+# projects:
+# - dir: .
 #   workflow: terragrunt
-workflows:
-  terragrunt:
-    plan:
-      steps:
-      - env:
-          name: TERRAGRUNT_TFPATH
-          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
-      - env:
-          # Reduce Terraform suggestion output
-          name: TF_IN_AUTOMATION
-          value: 'true'
-      - run: terragrunt plan -input=false -lock=false
+# # - dir: ./Staging
+# #   workflow: terragrunt
+# workflows:
+#   terragrunt:
+#     plan:
+#       steps:
+#       - env:
+#           name: TERRAGRUNT_TFPATH
+#           command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+#       - env:
+#           # Reduce Terraform suggestion output
+#           name: TF_IN_AUTOMATION
+#           value: 'true'
+#       - run: terragrunt plan -input=false -lock=false
 
-    apply:
-      steps:
-      - env:
-          name: TERRAGRUNT_TFPATH
-          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
-      - env:
-          # Reduce Terraform suggestion output
-          name: TF_IN_AUTOMATION
-          value: 'true'
-     # - run: terragrunt apply -auto-approve -lock=false
+#     apply:
+#       steps:
+#       - env:
+#           name: TERRAGRUNT_TFPATH
+#           command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+#       - env:
+#           # Reduce Terraform suggestion output
+#           name: TF_IN_AUTOMATION
+#           value: 'true'
+#      # - run: terragrunt apply -auto-approve -lock=false
