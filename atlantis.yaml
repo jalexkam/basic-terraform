@@ -17,6 +17,7 @@ workflows:
           value: 'true'
       
       - run: terragrunt init 
+      - run: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
     apply:
       steps:
       - env:
