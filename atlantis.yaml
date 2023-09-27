@@ -15,6 +15,7 @@ workflows:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
+      - run: /usr/local/bin/terragrunt plan
       - run:
           command: terragrunt plan -input=false -out=$PLANFILE
           output: strip_refreshing
