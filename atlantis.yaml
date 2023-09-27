@@ -35,11 +35,6 @@ workflows:
     apply:
       steps:
       - env:
-        # set the workspace
-        name: TF_WORKSPACE
-        command: 'echo "terraform - ${WORKSPACE}"'
-
-      - env:
           name: TERRAGRUNT_TFPATH
           command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
       - env:
