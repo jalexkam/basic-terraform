@@ -1,8 +1,8 @@
 version: 3
 projects:
-- dir: Dev
+- dir: ./Dev
   workflow: terragrunt
-- dir: Staging
+- dir: ./Staging
   workflow: terragrunt
 workflows:
   terragrunt:
@@ -15,7 +15,7 @@ workflows:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
-      - run: terragrunt plan -input=false -out=$PLANFILE
+      - run: terragrunt plan -input=false -lock=false
 
     apply:
       steps:
@@ -26,4 +26,4 @@ workflows:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
-      - run: terragrunt apply $PLANFILE
+      - run: terragrunt apply -auto-approve -lock=false
