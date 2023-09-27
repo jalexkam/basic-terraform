@@ -16,7 +16,7 @@ workflows:
           name: TF_IN_AUTOMATION
           value: 'true'
       
-      - run: terragrunt plan -input=false -out=$PLANFILE
+      - run: terragrunt init 
     apply:
       steps:
       - env:
