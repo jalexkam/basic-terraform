@@ -1,9 +1,9 @@
 version: 3
 projects:
-- dir: Dev
+- dir: .
   workflow: terragrunt
-- dir: ./Staging
-  workflow: terragrunt
+# - dir: ./Staging
+#   workflow: terragrunt
 workflows:
   terragrunt:
     plan:
