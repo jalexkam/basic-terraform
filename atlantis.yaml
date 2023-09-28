@@ -1,15 +1,53 @@
-# atlantis.yaml
-version: 3
-projects:
-# If two or more projects have the same dir and workspace, they must also have
-# a 'name' key to differentiate them.
-- name: vpc-dev
-  dir: vpc
-  workflow: dev
-- name: vpc-production
-  dir: vpc
-  workflow: production
+# # atlantis.yaml
+# version: 3
+# projects:
+# # If two or more projects have the same dir and workspace, they must also have
+# # a 'name' key to differentiate them.
+# - name: vpc-dev
+#   dir: vpc
+#   workflow: dev
+# - name: vpc-production
+#   dir: vpc
+#   workflow: production
   
+#   # repos.yaml or atlantis.yaml
+# workflows:
+#   dev:
+#     plan:
+#       steps:
+#         - env:
+#             name: TF_WORKSPACE
+#             command: 'echo $WORKSPACE'
+#         - env:
+#             # Reduce Terraform suggestion output
+#             name: TF_IN_AUTOMATION
+#             value: 'true'
+#         - init
+#         - plan:
+#             extra_args: ["-var-file", "dev.tfvars"]
+#     apply:
+#         steps:
+#           - apply:
+#               #extra_args: ["-var-file", "dev.tfvars"]
+#   production:
+#     plan:
+#       steps:
+#         - env:
+#             name: TF_WORKSPACE
+#             command: 'echo $WORKSPACE'
+#         - env:
+#             # Reduce Terraform suggestion output
+#             name: TF_IN_AUTOMATION
+#             value: 'true'
+#         - init
+#         - plan:
+#             extra_args: ["-var-file", "production.tfvars"]
+#     apply:
+#       steps:
+#         - apply:
+#             #extra_args: ["-var-file", "production.tfvars"]
+
+
   # repos.yaml or atlantis.yaml
 workflows:
   dev:
@@ -39,10 +77,43 @@ workflows:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
-        - init
-        - plan:
-            extra_args: ["-var-file", "production.tfvars"]
+
+        - run:
+          command: terraform init -input=false
+
+        # If you're using workspaces you need to select the workspace using the
+        # $WORKSPACE environment variable.
+        - run: terraform workspace select $WORKSPACE
+        
+        # You MUST output the plan using -out $PLANFILE because Atlantis expects
+        # plans to be in a specific location.
+        - run: terraform plan -input=false -var-file= "production.tfvars" -refresh -out $PLANFILE
+
+        # - plan:
+        #     extra_args: ["-var-file", "production.tfvars"]
     apply:
       steps:
         - apply:
             #extra_args: ["-var-file", "production.tfvars"]
+
+workflows:
+  myworkflow:
+    plan:
+      steps:
+      # If you want to hide command output from Atlantis's PR comment, use
+      # the output option on the run step's expanded form.
+      - run:
+          command: terraform init -input=false
+          output: hide
+      
+      # If you're using workspaces you need to select the workspace using the
+      # $WORKSPACE environment variable.
+      - run: terraform workspace select $WORKSPACE
+      
+      # You MUST output the plan using -out $PLANFILE because Atlantis expects
+      # plans to be in a specific location.
+      - run: terraform plan -input=false -refresh -out $PLANFILE
+    apply:
+      steps:
+      # Again, you must use the $PLANFILE environment variable.
+      - run: terraform apply $PLANFILE
