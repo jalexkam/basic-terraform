@@ -96,24 +96,3 @@ workflows:
         - apply:
             #extra_args: ["-var-file", "production.tfvars"]
 
-workflows:
-  myworkflow:
-    plan:
-      steps:
-      # If you want to hide command output from Atlantis's PR comment, use
-      # the output option on the run step's expanded form.
-      - run:
-          command: terraform init -input=false
-          output: hide
-      
-      # If you're using workspaces you need to select the workspace using the
-      # $WORKSPACE environment variable.
-      - run: terraform workspace select $WORKSPACE
-      
-      # You MUST output the plan using -out $PLANFILE because Atlantis expects
-      # plans to be in a specific location.
-      - run: terraform plan -input=false -refresh -out $PLANFILE
-    apply:
-      steps:
-      # Again, you must use the $PLANFILE environment variable.
-      - run: terraform apply $PLANFILE
