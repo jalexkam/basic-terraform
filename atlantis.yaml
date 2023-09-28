@@ -1,0 +1,34 @@
+# atlantis.yaml
+version: 3
+projects:
+# If two or more projects have the same dir and workspace, they must also have
+# a 'name' key to differentiate them.
+- name: vpc-dev
+  dir: vpc
+  workflow: staging
+- name: vpc-production
+  dir: vpc
+  workflow: production
+  
+  # repos.yaml or atlantis.yaml
+workflows:
+  dev:
+    plan:
+      steps:
+      - init
+      - plan:
+          extra_args: ["-var-file", "dev.tfvars"]
+    apply:
+        steps:
+          - apply:
+              extra_args: ["-var-file", "dev.tfvars"]
+  production:
+    plan:
+      steps:
+      - init
+      - plan:
+          extra_args: ["-var-file", "production.tfvars"]
+    apply:
+      steps:
+        - apply:
+            extra_args: ["-var-file", "production.tfvars"]
