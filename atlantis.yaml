@@ -70,9 +70,9 @@ workflows:
   production:
     plan:
       steps:
-        - env:
-            name: TF_WORKSPACE
-            command: 'echo $WORKSPACE'
+        # - env:
+        #     name: TF_WORKSPACE
+        #     command: 'echo $WORKSPACE'
         - env:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
