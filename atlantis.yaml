@@ -77,9 +77,9 @@ workflows:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
-
+            
         - run:
-          command: terraform init -input=false
+            command: terraform init -input=false
 
         # If you're using workspaces you need to select the workspace using the
         # $WORKSPACE environment variable.
