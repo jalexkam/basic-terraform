@@ -5,7 +5,7 @@ projects:
 # a 'name' key to differentiate them.
 - name: vpc-dev
   dir: vpc
-  workflow: staging
+  workflow: dev
 - name: vpc-production
   dir: vpc
   workflow: production
