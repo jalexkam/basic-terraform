@@ -15,17 +15,16 @@ workflows:
   dev:
     plan:
       steps:
-      - env:
-        name: TF_WORKSPACE
-        command: 'echo $WORKSPACE'
-      - env:
-          # Reduce Terraform suggestion output
-          name: TF_IN_AUTOMATION
-          value: 'true'
-
-      - init
-      - plan:
-          extra_args: ["-var-file", "dev.tfvars"]
+        - env:
+          name: TF_WORKSPACE
+          command: 'echo $WORKSPACE'
+        - env:
+            # Reduce Terraform suggestion output
+            name: TF_IN_AUTOMATION
+            value: 'true'
+        - init
+        - plan:
+            extra_args: ["-var-file", "dev.tfvars"]
     apply:
         steps:
           - apply:
@@ -33,16 +32,16 @@ workflows:
   production:
     plan:
       steps:
-      - env:
-          name: TF_WORKSPACE
-          command: 'echo $WORKSPACE'
-      - env:
-          # Reduce Terraform suggestion output
-          name: TF_IN_AUTOMATION
-          value: 'true'
-      - init
-      - plan:
-          extra_args: ["-var-file", "production.tfvars"]
+        - env:
+            name: TF_WORKSPACE
+            command: 'echo $WORKSPACE'
+        - env:
+            # Reduce Terraform suggestion output
+            name: TF_IN_AUTOMATION
+            value: 'true'
+        - init
+        - plan:
+            extra_args: ["-var-file", "production.tfvars"]
     apply:
       steps:
         - apply:
