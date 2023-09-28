@@ -86,7 +86,7 @@ workflows:
         
         # You MUST output the plan using -out $PLANFILE because Atlantis expects
         # plans to be in a specific location.
-        - run: terraform plan -input=false -var-file= "production.tfvars" -refresh -out $PLANFILE
+        - run: terraform plan -input=false -var-file="production.tfvars" -out $PLANFILE
 
         # - plan:
         #     extra_args: ["-var-file", "production.tfvars"]
