@@ -1,14 +1,14 @@
-# # atlantis.yaml
-# version: 3
-# projects:
-# # If two or more projects have the same dir and workspace, they must also have
-# # a 'name' key to differentiate them.
-# - name: vpc-dev
-#   dir: vpc
-#   workflow: dev
-# - name: vpc-production
-#   dir: vpc
-#   workflow: production
+# atlantis.yaml
+version: 3
+projects:
+# If two or more projects have the same dir and workspace, they must also have
+# a 'name' key to differentiate them.
+- name: vpc-dev
+  dir: vpc
+  workflow: dev
+- name: vpc-production
+  dir: vpc
+  workflow: production
   
 #   # repos.yaml or atlantis.yaml
 # workflows:
