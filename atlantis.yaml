@@ -10,44 +10,6 @@ projects:
   dir: vpc
   workflow: production
   
-#   # repos.yaml or atlantis.yaml
-# workflows:
-#   dev:
-#     plan:
-#       steps:
-#         - env:
-#             name: TF_WORKSPACE
-#             command: 'echo $WORKSPACE'
-#         - env:
-#             # Reduce Terraform suggestion output
-#             name: TF_IN_AUTOMATION
-#             value: 'true'
-#         - init
-#         - plan:
-#             extra_args: ["-var-file", "dev.tfvars"]
-#     apply:
-#         steps:
-#           - apply:
-#               #extra_args: ["-var-file", "dev.tfvars"]
-#   production:
-#     plan:
-#       steps:
-#         - env:
-#             name: TF_WORKSPACE
-#             command: 'echo $WORKSPACE'
-#         - env:
-#             # Reduce Terraform suggestion output
-#             name: TF_IN_AUTOMATION
-#             value: 'true'
-#         - init
-#         - plan:
-#             extra_args: ["-var-file", "production.tfvars"]
-#     apply:
-#       steps:
-#         - apply:
-#             #extra_args: ["-var-file", "production.tfvars"]
-
-
   # repos.yaml or atlantis.yaml
 workflows:
   dev:
@@ -70,28 +32,17 @@ workflows:
   production:
     plan:
       steps:
-        # - env:
-        #     name: TF_WORKSPACE
-        #     command: 'echo $WORKSPACE'
+        - env:
+            name: TF_WORKSPACE
+            command: 'echo $WORKSPACE'
         - env:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
-
-        - run: terraform init -input=false
-
-        # If you're using workspaces you need to select the workspace using the
-        # $WORKSPACE environment variable.
-        - run: terraform workspace select $WORKSPACE
-        
-        # You MUST output the plan using -out $PLANFILE because Atlantis expects
-        # plans to be in a specific location.
-        - run: terraform plan -input=false -var-file="production.tfvars" -refresh -out $PLANFILE
-
-        # - plan:
-        #     extra_args: ["-var-file", "production.tfvars"]
+        - init
+        - plan:
+            extra_args: ["-var-file", "production.tfvars"]
     apply:
       steps:
         - apply:
             #extra_args: ["-var-file", "production.tfvars"]
-
