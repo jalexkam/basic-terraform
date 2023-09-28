@@ -8,6 +8,13 @@ variable "aws_region" {
   type        = string
 }
 
+
+variable "project" {
+  description = "project"
+  type        = string
+}
+
+
 variable "environment" {
   description = "environment"
   type        = string
