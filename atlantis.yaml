@@ -4,10 +4,10 @@ projects:
 # If two or more projects have the same dir and workspace, they must also have
 # a 'name' key to differentiate them.
 - name: vpc-dev
-  dir: vpc
+  dir: infrastructure
   workflow: dev
 - name: vpc-production
-  dir: vpc
+  dir: infrastructure
   workflow: production
   
   # repos.yaml or atlantis.yaml
