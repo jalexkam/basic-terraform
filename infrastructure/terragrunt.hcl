@@ -1,8 +1,7 @@
 locals { 
- // region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl"))
- // profile_vars = read_terragrunt_config(find_in_parent_folders("profile.hcl"))
-  //environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+ region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl"))
+ profile_vars = read_terragrunt_config(find_in_parent_folders("profile.hcl"))
+environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
 
   # Extract the variables we need for easy access
@@ -22,19 +21,31 @@ locals {
 # }
 
 remote_state {
-  backend = "s3"
+  backend = "local"
   generate = {
     path      = "backend.tf"
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    key            = "${path_relative_to_include()}/vpc/terraform.tfstate"
-    bucket         = "state-bucket-62746"
-    dynamodb_table = "state-table-62746"
-    encrypt        = true
-    region         = "us-east-1"
+    path = "${path_relative_to_include()}/vpc/terraform.tfstate"
   }
 }
+
+
+# remote_state {
+#   backend = "s3"
+#   generate = {
+#     path      = "backend.tf"
+#     if_exists = "overwrite_terragrunt"
+#   }
+#   config = {
+#     key            = "${path_relative_to_include()}/vpc/terraform.tfstate"
+#     bucket         = "state-bucket-62746"
+#     dynamodb_table = "state-table-62746"
+#     encrypt        = true
+#     region         = "us-east-1"
+#   }
+# }
 
 generate "provider" {
   path = "provider.tf"
@@ -51,14 +62,25 @@ generate "provider" {
 }
 
 provider "aws" {
-  region                   = "us-east-1"
-  shared_credentials_files = ["%USERPROFILE%/.aws/credentials"]
-  shared_config_files      = ["%USERPROFILE%/.aws/conf"]
-  profile                  = "alex-meli-card-admincli"
+  region                   = "${local.aws_region}"
+  shared_credentials_files =["${local.shared_credentials_files}"]
+  profile                  = "${local.aws_profile}"
 }
 
   EOF
 }
+# generate "provider" {
+#   path = "provider.tf"
+#   if_exists = "overwrite_terragrunt"
+#   contents = <<EOF
+#     provider "aws" {
+#       region  = "eu-west-1"
+#       profile = "alex-meli-card-admincli2"
+#       shared_credentials_files = ["C:/Users/alex/.aws/credentials"]
+#     }
+#   EOF
+# }
+
 
 inputs = merge(  
   local.region_vars.locals,
