@@ -57,12 +57,12 @@ workflows:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
-      - run: terragrunt plan -no-color -out $PLANFILE
+      - run: terragrunt plan -lock=false
           # Allow for targetted plans/applies as not supported for Terraform wrappers by default
           #command: terragrunt plan -input=false $(printf '%s' $COMMENT_ARGS | sed 's/,/ /g' | tr -d '\\') -no-color -out $PLANFILE
           #output: hide
-      - run: |
-          terragrunt show $PLANFILE
+      # - run: |
+      #     terragrunt show $PLANFILE
     apply:
       steps:
       - env:
@@ -72,7 +72,7 @@ workflows:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
-      - run: terragrunt apply -input=false $PLANFILE
+      - run: terragrunt apply -input=false -lock=false
     # import:
     #   steps:
     #   - env:
