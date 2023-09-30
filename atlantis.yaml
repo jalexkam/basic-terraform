@@ -6,9 +6,9 @@ projects:
 - name: vpc-dev
   dir: infrastructure/eu-west-1/dev/vpc
   workflow: terragrunt
-# - name: vpc-production
-#   dir: infrastructure
-#   workflow: production
+- name: vpc-production
+  dir:  infrastructure/us-east-2/prod/vpc
+  workflow: production
   
   # repos.yaml or atlantis.yaml
 
@@ -22,6 +22,21 @@ workflows:
     apply:
       steps:
       - run: terragrunt apply -input=false -no-color $PLANFILE
+  production:
+    plan:
+      steps:
+        - env:
+            name: TF_WORKSPACE
+            command: 'echo $WORKSPACE'
+        - env:
+            # Reduce Terraform suggestion output
+            name: TF_IN_AUTOMATION
+            value: 'true'
+        - run: terragrunt init -input=false -no-color
+        - run: terragrunt plan -input=false -no-color -out $PLANFILE
+    apply:
+      steps:
+        - run: terragrunt apply -input=false -no-color $PLANFILE
       
 # workflows:
 #   dev:
