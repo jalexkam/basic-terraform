@@ -49,6 +49,7 @@ remote_state {
     dynamodb_table = local.remote_state_dynamodb_name
     encrypt        = true
     region         = "us-east-1"
+    shared_credentials_file  = ["${local.shared_credentials_files}"]
     profile        = local.aws_profile
   }
 }
