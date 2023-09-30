@@ -32,7 +32,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    path = "${path_relative_to_include()}/vpc/terraform.tfstate"
+    path = "${path_relative_to_include()}/terraform.tfstate"
   }
 }
 
