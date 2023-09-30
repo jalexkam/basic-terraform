@@ -25,34 +25,34 @@ environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 #   }
 # }
 
-# remote_state {
-#   backend = "local"
-#   generate = {
-#     path      = "backend.tf"
-#     if_exists = "overwrite_terragrunt"
-#   }
-#   config = {
-#     path = "${path_relative_to_include()}/vpc/terraform.tfstate"
-#   }
-# }
-
-
 remote_state {
-  backend = "s3"
+  backend = "local"
   generate = {
     path      = "backend.tf"
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    key            = "${path_relative_to_include()}/terraform.tfstate"
-    bucket         = local.remote_state_bucket_name
-    dynamodb_table = local.remote_state_dynamodb_name
-    encrypt        = true
-    region         = "us-east-1"
-    shared_credentials_file  = "${local.shared_credentials_files}"
-    profile        = local.aws_profile
+    path = "${path_relative_to_include()}/vpc/terraform.tfstate"
   }
 }
+
+
+# remote_state {
+#   backend = "s3"
+#   generate = {
+#     path      = "backend.tf"
+#     if_exists = "overwrite_terragrunt"
+#   }
+#   config = {
+#     key            = "${path_relative_to_include()}/terraform.tfstate"
+#     bucket         = local.remote_state_bucket_name
+#     dynamodb_table = local.remote_state_dynamodb_name
+#     encrypt        = true
+#     region         = "us-east-1"
+#     shared_credentials_file  = "${local.shared_credentials_files}"
+#     profile        = local.aws_profile
+#   }
+# }
 
 generate "provider" {
   path = "provider.tf"
