@@ -1,0 +1,32 @@
+version: 3
+projects:
+- dir: ./Dev
+  terraform_version: v1.5.7
+  workflow: terragrunt
+- dir: ./Staging
+  terraform_version: v1.5.7
+  workflow: terragrunt
+workflows:
+  terragrunt:
+    plan:
+      steps:
+      - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+      - env:
+          # Reduce Terraform suggestion output
+          name: TF_IN_AUTOMATION
+          value: 'true'
+      
+      - run: terragrunt init -input=false -no-color
+      - run: terragrunt plan -input=false -no-color -out $PLANFILE
+    apply:
+      steps:
+      - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+      - env:
+          # Reduce Terraform suggestion output
+          name: TF_IN_AUTOMATION
+          value: 'true'
+      - run: terragrunt apply -input=false -no-color $PLANFILE
