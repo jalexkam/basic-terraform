@@ -20,7 +20,8 @@ workflows:
     plan:
       steps:
       - run: terragrunt init -input=false -no-color
-      - run: terragrunt plan -input=false -no-color -out $PLANFILE
+      # - run: terragrunt plan -input=false -no-color -out $PLANFILE
+      - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt plan -no-color -out $PLANFILE -destroy; else terragrunt plan -input=false -no-color -out $PLANFILE ; fi
     apply:
       steps:
       - run: terragrunt apply -input=false -no-color $PLANFILE
@@ -38,7 +39,11 @@ workflows:
         - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:
       steps:
-        - run: terragrunt apply -input=false -no-color $PLANFILE
+        #- run: terragrunt apply -input=false -no-color $PLANFILE
+        - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt destroy --terragrunt-non-interactive -auto-approve; else echo "apply"; terragrunt apply --terragrunt-non-interactive -auto-approve; fi
+                +++++++++++++++++ Destroy Comments with plan and apply ++++++++++++
+                atlantis plan -d dir -- -destroy
+                atlantis apply -d dir -- -destroy
       
 # workflows:
 #   dev:
