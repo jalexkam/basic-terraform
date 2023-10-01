@@ -32,7 +32,7 @@ workflows:
       
       - run: terragrunt init -input=false -no-color
 
-      - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt plan -no-color -out $PLANFILE -destroy; else terragrunt init -input=false -no-color ; fi
+      - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt plan -no-color -out $PLANFILE -destroy; else echo '-plan'; terragrunt plan -input=false -no-color -out $PLANFILE;  fi
       # - run: terragrunt init -input=false -no-color
       # - run: terragrunt plan -no-color -out $PLANFILE $DESTROY_PARAMETER
      # - run: terragrunt plan -input=false -no-color -out $PLANFILE
