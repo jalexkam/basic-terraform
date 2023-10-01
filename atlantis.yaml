@@ -39,7 +39,7 @@ workflows:
     apply:
       steps:
       # - run: terragrunt apply -input=false -no-color $PLANFILE
-      - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt destroy --terragrunt-non-interactive -auto-approve; else echo "apply"; terragrunt apply --terragrunt-non-interactive -auto-approve; fi
+      - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt destroy --auto-approve; else echo "apply"; terragrunt apply --terragrunt-non-interactive -auto-approve; fi
   production:
     plan:
       steps:
