@@ -3,10 +3,13 @@ include {
 }
 
 terraform {
-    extra_arguments "common_var" {
-      commands  = get_terraform_commands_that_need_vars()
-      arguments = ["-var-file=${get_terragrunt_dir()}/terraform.tfvars"]
-    }
+    # extra_arguments "common_var" {
+    #   commands  = get_terraform_commands_that_need_vars()
+    #   arguments = ["-var-file=${get_terragrunt_dir()}/terraform.tfvars"]
+    # }
+
+# we can use the command above if you we want to pass the terraform.tfvars to the module as input
+
 
       source = "../Modules/vpc"
   }
