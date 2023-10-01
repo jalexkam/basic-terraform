@@ -1,8 +1,8 @@
 version: 3
 projects:
-- dir: live/staging
+- dir: ./Dev
   workflow: terragrunt
-- dir: live/prod
+- dir: ./Stging
   workflow: terragrunt
 workflows:
   terragrunt:
