@@ -1,8 +1,10 @@
 version: 3
 projects:
 - dir: ./Dev
+  terraform_version: v1.5.7
   workflow: terragrunt
-- dir: ./Stging
+- dir: ./Staging
+  terraform_version: v1.5.7
   workflow: terragrunt
 workflows:
   terragrunt:
@@ -16,7 +18,7 @@ workflows:
           name: TF_IN_AUTOMATION
           value: 'true'
       
-      - run: terragrunt init 
+      - run: terragrunt init -upgrade
       - run: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
     apply:
       steps:
