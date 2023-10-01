@@ -5,11 +5,9 @@ projects:
 # a 'name' key to differentiate them.
 - name: vpc-dev
   dir: infrastructure/eu-west-1/dev/vpc
-  terraform_version: v1.5.7
   workflow: terragrunt
 - name: vpc-production
   dir:  infrastructure/us-east-2/prod/vpc
-  terraform_version: v1.5.7
   workflow: production
   
   # repos.yaml or atlantis.yaml
@@ -19,9 +17,16 @@ workflows:
   terragrunt:
     plan:
       steps:
+      - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+      - env:
+          name: DESTROY_PARAMETER
+          command:  if [ "$COMMENT_ARGS" = "\-\d\e\s\t\r\o\y" ]; then echo "-destroy"; else echo ""; fi
+
       - run: terragrunt init -input=false -no-color
-      # - run: terragrunt plan -input=false -no-color -out $PLANFILE
-      - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt plan -no-color -out $PLANFILE -destroy; else terragrunt plan -input=false -no-color -out $PLANFILE ; fi
+      - run: terragrunt plan -no-color -out $PLANFILE $DESTROY_PARAMETER
+     # - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:
       steps:
       - run: terragrunt apply -input=false -no-color $PLANFILE
@@ -39,11 +44,7 @@ workflows:
         - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:
       steps:
-        #- run: terragrunt apply -input=false -no-color $PLANFILE
-        - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt destroy --terragrunt-non-interactive -auto-approve; else echo "apply"; terragrunt apply --terragrunt-non-interactive -auto-approve; fi
-                +++++++++++++++++ Destroy Comments with plan and apply ++++++++++++
-                atlantis plan -d dir -- -destroy
-                atlantis apply -d dir -- -destroy
+        - run: terragrunt apply -input=false -no-color $PLANFILE
       
 # workflows:
 #   dev:
