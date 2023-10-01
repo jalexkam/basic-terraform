@@ -55,8 +55,8 @@ remote_state {
 # }
 
 generate "provider" {
-  path = "_provider.tf"
-  if_exists = "overwrite_terragrunt"
+  path = "provider.tf"
+  if_exists = "overwrite"
   contents = <<EOF
    terraform {
   required_version = ">= 1.0"
