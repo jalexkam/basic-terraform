@@ -8,7 +8,7 @@ terraform {
       arguments = ["-var-file=${get_terragrunt_dir()}/terraform.tfvars"]
     }
 
-      source = "../modules/vpc"
+      source = "../Modules/vpc"
   }
 inputs = {
   cidr_block = "172.100.0.0/16"

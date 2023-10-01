@@ -8,7 +8,7 @@ terraform {
       arguments = ["-var-file=${get_terragrunt_dir()}/terraform.tfvars"]
     }
 
-      source = "../modules/vpc"
+      source = "../Modules/vpc"
   }
   
 inputs = {
