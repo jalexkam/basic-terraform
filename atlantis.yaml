@@ -20,18 +20,26 @@ workflows:
     plan:
       steps:
       - env:
+          name: TF_WORKSPACE
+          command: 'echo $WORKSPACE'
+      - env:
+          # Reduce Terraform suggestion output
+          name: TF_IN_AUTOMATION
+          value: 'true'
+      - env:
           name: TERRAGRUNT_TFPATH
           command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
-      - env:
-          name: DESTROY_PARAMETER
-          command:  if [ "$COMMENT_ARGS" = "\-\d\e\s\t\r\o\y" ]; then echo "-destroy"; else echo ""; fi
-
+      
       - run: terragrunt init -input=false -no-color
-      - run: terragrunt plan -no-color -out $PLANFILE $DESTROY_PARAMETER
+
+      - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt plan -no-color -out $PLANFILE -destroy; else terragrunt init -input=false -no-color ; fi
+      # - run: terragrunt init -input=false -no-color
+      # - run: terragrunt plan -no-color -out $PLANFILE $DESTROY_PARAMETER
      # - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:
       steps:
-      - run: terragrunt apply -input=false -no-color $PLANFILE
+      # - run: terragrunt apply -input=false -no-color $PLANFILE
+      - run: if [ "$COMMENT_ARGS" = "-\d\e\s\t\r\o\y" ]; then echo "-destroy"; terragrunt destroy --terragrunt-non-interactive -auto-approve; else echo "apply"; terragrunt apply --terragrunt-non-interactive -auto-approve; fi
   production:
     plan:
       steps:
