@@ -5,9 +5,11 @@ projects:
 # a 'name' key to differentiate them.
 - name: vpc-dev
   dir: infrastructure/eu-west-1/dev/vpc
+  terraform_version: v1.5.7
   workflow: terragrunt
 - name: vpc-production
   dir:  infrastructure/us-east-2/prod/vpc
+  terraform_version: v1.5.7
   workflow: production
   
   # repos.yaml or atlantis.yaml
