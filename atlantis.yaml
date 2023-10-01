@@ -18,8 +18,8 @@ workflows:
           name: TF_IN_AUTOMATION
           value: 'true'
       
-      - run: terragrunt init -upgrade
-      - run: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+      - run: terragrunt init -input=false -no-color
+      - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:
       steps:
       - env:
@@ -29,4 +29,4 @@ workflows:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
-      - run: terragrunt apply $PLANFILE
+      - run: terragrunt apply -input=false -no-color $PLANFILE
