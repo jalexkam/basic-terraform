@@ -1,0 +1,138 @@
+# atlantis.yaml
+version: 3
+projects:
+# If two or more projects have the same dir and workspace, they must also have
+# a 'name' key to differentiate them.
+- name: vpc-dev
+  dir: infrastructure/eu-west-1/dev/vpc
+  terraform_version: v1.5.7
+  workflow: terragrunt
+- name: vpc-production
+  dir:  infrastructure/us-east-2/prod/vpc
+  terraform_version: v1.5.7
+  workflow: production
+  
+  # repos.yaml or atlantis.yaml
+
+# Instead of terraform commands, run these for plan and apply
+workflows:
+  terragrunt:
+    plan:
+      steps:
+      - env:
+          name: TF_WORKSPACE
+          command: 'echo $WORKSPACE'
+      - env:
+      name: TERRAGRUNT_TFPATH
+      command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+
+      - env:
+          # Reduce Terraform suggestion output
+          name: TF_IN_AUTOMATION
+          value: 'true'
+
+      - run: terragrunt init -input=false -no-color
+      - run: terragrunt plan -input=false -no-color -out $PLANFILE
+    apply:
+      steps:
+      - run: terragrunt apply -input=false -no-color $PLANFILE
+  production:
+    plan:
+      steps:
+        - env:
+            name: TF_WORKSPACE
+            command: 'echo $WORKSPACE'
+        - env:
+        name: TERRAGRUNT_TFPATH
+        command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+
+        - env:
+            # Reduce Terraform suggestion output
+            name: TF_IN_AUTOMATION
+            value: 'true'
+            
+        - run: terragrunt init -input=false -no-color
+        - run: terragrunt plan -input=false -no-color -out $PLANFILE
+    apply:
+      steps:
+        - run: terragrunt apply -input=false -no-color $PLANFILE
+      
+# workflows:
+#   dev:
+#     plan:
+#       steps:
+#         - env:
+#             name: TF_WORKSPACE
+#             command: 'echo $WORKSPACE'
+#         - env:
+#             # Reduce Terraform suggestion output
+#             name: TF_IN_AUTOMATION
+#             value: 'true'
+#         - init
+#         - plan:
+#             extra_args: ["-var-file", "dev.tfvars"]
+#     apply:
+#         steps:
+#           - apply:
+#               #extra_args: ["-var-file", "dev.tfvars"]
+#   production:
+#     plan:
+#       steps:
+#         - env:
+#             name: TF_WORKSPACE
+#             command: 'echo $WORKSPACE'
+#         - env:
+#             # Reduce Terraform suggestion output
+#             name: TF_IN_AUTOMATION
+#             value: 'true'
+#         - init
+#         - plan:
+#             extra_args: ["-var-file", "production.tfvars"]
+#     apply:
+#       steps:
+#         - apply:
+#             #extra_args: ["-var-file", "production.tfvars"]
+
+#   terragrunt:
+#     plan:
+#       steps:
+#       - env:
+#           name: TERRAGRUNT_TFPATH
+#           command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+#       - env:
+#           # Reduce Terraform suggestion output
+#           name: TF_IN_AUTOMATION
+#           value: 'true'
+#       - run: terragrunt plan -lock=false
+#           # Allow for targetted plans/applies as not supported for Terraform wrappers by default
+#           #command: terragrunt plan -input=false $(printf '%s' $COMMENT_ARGS | sed 's/,/ /g' | tr -d '\\') -no-color -out $PLANFILE
+#           #output: hide
+#       # - run: |
+#       #     terragrunt show $PLANFILE
+#     apply:
+#       steps:
+#       - env:
+#           name: TERRAGRUNT_TFPATH
+#           command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+#       - env:
+#           # Reduce Terraform suggestion output
+#           name: TF_IN_AUTOMATION
+#           value: 'true'
+#       - run: terragrunt apply -input=false -lock=false
+#     # import:
+#     #   steps:
+#     #   - env:
+#     #       name: TERRAGRUNT_TFPATH
+#     #       command: 'echo "terraform${DEFAULT_TERRAFORM_VERSION}"'
+#     #   - env:
+#     #       name: TF_VAR_author
+#     #       command: 'git show -s --format="%ae" $HEAD_COMMIT'
+#     #   # Allow for imports as not supported for Terraform wrappers by default
+#     #   - run: terragrunt import -input=false $(printf '%s' $COMMENT_ARGS | sed 's/,/ /' | tr -d '\\')
+#     # state_rm:
+#     #   steps:
+#     #   - env:
+#     #       name: TERRAGRUNT_TFPATH
+#     #       command: 'echo "terraform${DEFAULT_TERRAFORM_VERSION}"'
+#     #   # Allow for state removals as not supported for Terraform wrappers by default
+#     #   - run: terragrunt state rm $(printf '%s' $COMMENT_ARGS | sed 's/,/ /' | tr -d '\\')
