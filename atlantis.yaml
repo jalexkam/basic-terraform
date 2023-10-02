@@ -19,10 +19,18 @@ workflows:
   terragrunt:
     plan:
       steps:
+      - env:
+          name: TF_WORKSPACE
+          command: 'echo $WORKSPACE'
+      - env:
+      name: TERRAGRUNT_TFPATH
+      command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
 
       - env:
-          name: TERRAGRUNT_TFPATH
-          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+          # Reduce Terraform suggestion output
+          name: TF_IN_AUTOMATION
+          value: 'true'
+
       - run: terragrunt init -input=false -no-color
       - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:
@@ -35,9 +43,14 @@ workflows:
             name: TF_WORKSPACE
             command: 'echo $WORKSPACE'
         - env:
+        name: TERRAGRUNT_TFPATH
+        command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+
+        - env:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
+            
         - run: terragrunt init -input=false -no-color
         - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:
