@@ -5,50 +5,13 @@ projects:
 # a 'name' key to differentiate them.
 - name: vpc-dev
   dir: vpc
+  terraform_version: v1.5.7
   workflow: dev
 - name: vpc-production
   dir: vpc
+  terraform_version: v1.5.7
   workflow: production
-  
-#   # repos.yaml or atlantis.yaml
-# workflows:
-#   dev:
-#     plan:
-#       steps:
-#         - env:
-#             name: TF_WORKSPACE
-#             command: 'echo $WORKSPACE'
-#         - env:
-#             # Reduce Terraform suggestion output
-#             name: TF_IN_AUTOMATION
-#             value: 'true'
-#         - init
-#         - plan:
-#             extra_args: ["-var-file", "dev.tfvars"]
-#     apply:
-#         steps:
-#           - apply:
-#               #extra_args: ["-var-file", "dev.tfvars"]
-#   production:
-#     plan:
-#       steps:
-#         - env:
-#             name: TF_WORKSPACE
-#             command: 'echo $WORKSPACE'
-#         - env:
-#             # Reduce Terraform suggestion output
-#             name: TF_IN_AUTOMATION
-#             value: 'true'
-#         - init
-#         - plan:
-#             extra_args: ["-var-file", "production.tfvars"]
-#     apply:
-#       steps:
-#         - apply:
-#             #extra_args: ["-var-file", "production.tfvars"]
 
-
-  # repos.yaml or atlantis.yaml
 workflows:
   dev:
     plan:
@@ -60,38 +23,38 @@ workflows:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
+
         - init
+          # If you're using workspaces you need to select the workspace using the
+        # $WORKSPACE environment variable.     
+        - run: terraform workspace select $WORKSPACE
+
         - plan:
             extra_args: ["-var-file", "dev.tfvars"]
     apply:
         steps:
-          - apply:
-              #extra_args: ["-var-file", "dev.tfvars"]
+          - apply
+
   production:
     plan:
       steps:
-        # - env:
-        #     name: TF_WORKSPACE
-        #     command: 'echo $WORKSPACE'
+        - env:
+            name: TF_WORKSPACE
+            command: 'echo $WORKSPACE'
         - env:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
 
-        - run: terraform init -input=false
+        - init
 
         # If you're using workspaces you need to select the workspace using the
         # $WORKSPACE environment variable.
         - run: terraform workspace select $WORKSPACE
-        
-        # You MUST output the plan using -out $PLANFILE because Atlantis expects
-        # plans to be in a specific location.
-        - run: terraform plan -input=false -var-file="production.tfvars" -refresh -out $PLANFILE
 
-        # - plan:
-        #     extra_args: ["-var-file", "production.tfvars"]
+        - plan:
+            extra_args: ["-var-file", "production.tfvars"]
     apply:
       steps:
         - apply:
-            #extra_args: ["-var-file", "production.tfvars"]
 

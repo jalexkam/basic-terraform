@@ -13,6 +13,7 @@
 
 # .pem files
 *.pem
+**/.terragrunt-cache/*
 
 #terraform-CD.yml
 #backend.tf

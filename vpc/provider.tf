@@ -9,8 +9,8 @@ terraform {
 
   backend "s3" {
     key            = "basic-terraform-reset/terraform.tfstate"
-    bucket         = "state-bucket-62746"
-    dynamodb_table = "state-table-62746"
+    bucket         = "state-bucket-10378"
+    dynamodb_table = "state-table-10378"
     encrypt        = true
     region         = "us-east-1"
   }
@@ -20,5 +20,5 @@ terraform {
 provider "aws" {
   region                   = var.aws_region
   profile                  = var.aws_profile
-  shared_credentials_files = ["/home/ec2-user/.aws/credentials"]
+  shared_credentials_files = ["${var.aws_shared_credential_Location}"]
 }
