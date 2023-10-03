@@ -15,20 +15,12 @@ projects:
 workflows:
   dev:
     plan:
-      steps:
-        - env:
-            name: TF_WORKSPACE
-            command: 'echo $WORKSPACE'
         - env:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
 
         - init
-          # If you're using workspaces you need to select the workspace using the
-        # $WORKSPACE environment variable.     
-        - run: terraform workspace select $WORKSPACE
-
         - plan:
             extra_args: ["-var-file", "dev.tfvars"]
     apply:
@@ -39,19 +31,11 @@ workflows:
     plan:
       steps:
         - env:
-            name: TF_WORKSPACE
-            command: 'echo $WORKSPACE'
-        - env:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
 
         - init
-
-        # If you're using workspaces you need to select the workspace using the
-        # $WORKSPACE environment variable.
-        - run: terraform workspace select $WORKSPACE
-
         - plan:
             extra_args: ["-var-file", "production.tfvars"]
     apply:
