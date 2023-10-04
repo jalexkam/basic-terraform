@@ -3,11 +3,11 @@ version: 3
 projects:
 # If two or more projects have the same dir and workspace, they must also have
 # a 'name' key to differentiate them.
-- name: vpc-dev
+- name: Development-VPC
   dir: infrastructure/eu-west-1/dev/vpc
   terraform_version: v1.5.7
   workflow: terragrunt
-- name: vpc-production
+- name:  Development-VPC
   dir:  infrastructure/us-east-2/prod/vpc
   terraform_version: v1.5.7
   workflow: production
@@ -23,13 +23,13 @@ workflows:
           name: TF_WORKSPACE
           command: 'echo $WORKSPACE'
       - env:
-      name: TERRAGRUNT_TFPATH
-      command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
-
-      - env:
           # Reduce Terraform suggestion output
           name: TF_IN_AUTOMATION
           value: 'true'
+
+      - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
 
       - run: terragrunt init -input=false -no-color
       - run: terragrunt plan -input=false -no-color -out $PLANFILE
@@ -42,15 +42,16 @@ workflows:
         - env:
             name: TF_WORKSPACE
             command: 'echo $WORKSPACE'
-        - env:
-        name: TERRAGRUNT_TFPATH
-        command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
 
         - env:
             # Reduce Terraform suggestion output
             name: TF_IN_AUTOMATION
             value: 'true'
             
+        - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+
         - run: terragrunt init -input=false -no-color
         - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:

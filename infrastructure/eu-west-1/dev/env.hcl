@@ -1,4 +1,4 @@
 locals{
     environment = "Development"
-    location    = "Cardiff"
+    location    = "Ireland"
 }
