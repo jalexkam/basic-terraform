@@ -1,0 +1,47 @@
+# atlantis.yaml
+version: 3
+projects:
+# If two or more projects have the same dir and workspace, they must also have
+# a 'name' key to differentiate them.
+- name: vpc-dev
+  dir: vpc
+  terraform_version: v1.5.7
+  workflow: dev
+- name: vpc-production
+  dir: vpc
+  terraform_version: v1.5.7
+  workflow: production
+
+workflows:
+  dev:
+    plan:
+      steps:
+        - env:
+            # Reduce Terraform suggestion output
+            name: TF_IN_AUTOMATION
+            value: 'true'
+
+        - init
+
+        - plan:
+            extra_args: ["-var-file", "dev.tfvars"]
+    apply:
+        steps:
+          - apply
+
+  production:
+    plan:
+      steps:
+        - env:
+            # Reduce Terraform suggestion output
+            name: TF_IN_AUTOMATION
+            value: 'true'
+
+        - init
+
+        - plan:
+            extra_args: ["-var-file", "production.tfvars"]
+    apply:
+      steps:
+        - apply:
+
