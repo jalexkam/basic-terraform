@@ -9,8 +9,8 @@ terraform {
 
   backend "s3" {
     key            = "basic-terraform-reset/terraform.tfstate"
-    bucket         = "state-bucket-10378"
-    dynamodb_table = "state-table-10378"
+    bucket         = "state-bucket-15817"
+    dynamodb_table = "state-table-15817"
     encrypt        = true
     region         = "us-east-1"
   }
