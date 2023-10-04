@@ -8,8 +8,8 @@ locals {
   aws_region = local.region_vars.locals.aws_region
   aws_profile = local.profile_vars.locals.aws_profile
 
-  remote_state_bucket_name =  "state-bucket-10378"
-  remote_state_dynamodb_name = "state-table-10378"
+  remote_state_bucket_name =  "state-bucket-49702"
+  remote_state_dynamodb_name = "state-table-49702"
 }
 
 remote_state {
