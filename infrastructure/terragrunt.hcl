@@ -19,7 +19,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    key            = "${path_relative_to_include()}/terraform.tfstate"
+    key            = "${path_relative_to_include()}/test/terraform.tfstate"
     bucket         = local.remote_state_bucket_name
     dynamodb_table = local.remote_state_dynamodb_name
     encrypt        = true
