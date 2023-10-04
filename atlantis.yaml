@@ -34,24 +34,24 @@ workflows:
       - run: terragrunt plan -input=false -no-color -out $PLANFILE
     apply:
       steps:
-      - run: terragrunt apply -input=false -no-color $PLANFILE
+        - run: terragrunt apply -input=false -no-color $PLANFILE
 
   production:
     plan:
       steps:
-      - env:
-          name: TF_WORKSPACE
-          command: 'echo $WORKSPACE'
-      - env:
-          # Reduce Terraform suggestion output
-          name: TF_IN_AUTOMATION
-          value: 'true'         
-      - env:
-        name: TERRAGRUNT_TFPATH
-        command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+        - env:
+            name: TF_WORKSPACE
+            command: 'echo $WORKSPACE'
+        - env:
+            # Reduce Terraform suggestion output
+            name: TF_IN_AUTOMATION
+            value: 'true'         
+        - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
 
-      - run: terragrunt init -input=false -no-color
-      - run: terragrunt plan -input=false -no-color -out $PLANFILE
+        - run: terragrunt init -input=false -no-color
+        - run: terragrunt plan -input=false -no-color -out $PLANFILE
   
     apply:
       steps:
