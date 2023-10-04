@@ -6,17 +6,17 @@ projects:
 - name: Development-VPC
   dir: infrastructure/eu-west-1/dev/vpc
   terraform_version: v1.5.7
-  workflow: terragrunt
-- name:  Development-VPC
+  workflow: Development
+- name:  Production-VPC
   dir:  infrastructure/us-east-2/prod/vpc
   terraform_version: v1.5.7
-  workflow: production
+  workflow: Production
   
   # repos.yaml or atlantis.yaml
 
 # Instead of terraform commands, run these for plan and apply
 workflows:
-  terragrunt:
+  Development:
     plan:
       steps:
         - env:
@@ -36,7 +36,7 @@ workflows:
       steps:
         - run: terragrunt apply -input=false -no-color $PLANFILE
 
-  production:
+  Production:
     plan:
       steps:
         - env:
